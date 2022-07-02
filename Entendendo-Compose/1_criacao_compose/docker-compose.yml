@@ -1,0 +1,28 @@
+version: '3'
+
+services: #servicos da minha aplicacao
+  db: #nome que eu dei para meu container de MySQL
+    image: mysql:5.7 #imagem base 
+    volumes: #criando um volume 
+      - db_data:/var/lib/mysql 
+    restart: always #toda alteração que for feita no compose vai ser reflitada no projeoto
+    environment: #variaveis de ambientes 
+       MYSQL_ROOT_PASSWORD: wordpress
+       MYSQL_DATABASE: wordpress
+       MYSQL_USER: mateus
+       MYSQL_PASSWORD: secret 
+  
+  wordpress: 
+    depends_on: #dependencia desse container no caso ele é so executado logo após o db 
+      - db
+    image: wordpress:latest
+    ports: #qual porta vai ser externalizada ou seja exporta
+      - "8000:80"
+    environment:
+       WORDPRESS_DB_HOST: db:3306
+       WORDPRESS_DB_USER: mateus
+       WORDPRESS_DB_PASSWORD: secret
+       WORDPRESS_DB_NAME: wordpress
+volumes:
+  db_data: {}
+    
